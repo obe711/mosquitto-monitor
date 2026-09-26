@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(PROJECT_VER_MAJOR 0)
+set(PROJECT_VER_MAJOR 1)
 set(PROJECT_VER_MINOR 0)
-set(PROJECT_VER_PATCH 1)
+set(PROJECT_VER_PATCH 0)
 
 project(mosquitto-monitor VERSION "${PROJECT_VER_MAJOR}.${PROJECT_VER_MINOR}.${PROJECT_VER_PATCH}")
 
@@ -15,6 +15,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
+
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 find_library(MOSQUITTO_LIB mosquitto REQUIRED)
@@ -28,8 +29,8 @@ set(FTXUI_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(FTXUI_QUIET ON CACHE BOOL "" FORCE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG        v7.0.3
-  GIT_SHALLOW    TRUE)
+  GIT_TAG v7.0.3
+  GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(ftxui)
 
 add_library(monitor-core STATIC
@@ -66,6 +67,7 @@ target_link_libraries(mosquitto-monitor PRIVATE
   monitor-core ftxui::component ${MOSQUITTO_LIB} Threads::Threads)
 
 option(MOSQUITTO_MONITOR_TESTS "Build unit tests" OFF)
+
 if(MOSQUITTO_MONITOR_TESTS)
   enable_testing()
   add_subdirectory(tests)
